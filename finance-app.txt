@@ -1,0 +1,47 @@
+-- Tabel Pengguna
+CREATE TABLE Users (
+    User_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Nama VARCHAR(100),
+    Email VARCHAR(100) UNIQUE,
+    Password VARCHAR(255),
+    Tanggal_Lahir DATE,
+    Tanggal_Daftar TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel Kategori Transaksi
+CREATE TABLE Transaction_Categories (
+    Category_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Nama_Kategori VARCHAR(50)
+);
+
+-- Tabel Transaksi
+CREATE TABLE Transactions (
+    Transaction_ID INT PRIMARY KEY AUTO_INCREMENT,
+    User_ID INT,
+    Category_ID INT,
+    Tanggal DATE,
+    Jumlah DECIMAL(15,2),
+    Deskripsi TEXT,
+    FOREIGN KEY (User_ID) REFERENCES Users(User_ID),
+    FOREIGN KEY (Category_ID) REFERENCES Transaction_Categories(Category_ID)
+);
+
+-- Tabel Rekening
+CREATE TABLE Accounts (
+    Account_ID INT PRIMARY KEY AUTO_INCREMENT,
+    User_ID INT,
+    Nama_Rekening VARCHAR(50),
+    Saldo DECIMAL(15,2),
+    FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
+);
+
+-- Tabel Tagihan
+CREATE TABLE Bills (
+    Bill_ID INT PRIMARY KEY AUTO_INCREMENT,
+    User_ID INT,
+    Nama_Tagihan VARCHAR(100),
+    Jumlah DECIMAL(15,2),
+    Tanggal_Batas DATE,
+    Status ENUM('Belum Bayar', 'Sudah Bayar') DEFAULT 'Belum Bayar',
+    FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
+);

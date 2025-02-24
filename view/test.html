@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple GET Request</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Get Data from API</h1>
+
+  <button id="getDataButton">Get Data</button>
+  
+  <div id="result">
+    <h2>API Response:</h2>
+    <pre id="response"></pre>
+  </div>
+
+  <script>
+    document.getElementById('getDataButton').addEventListener('click', function() {
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJmYWl6Z2FtaW5nQGdtYWlsLmNvbSIsImlhdCI6MTc0MDM4OTQ5NSwiZXhwIjoxNzQwMzkzMDk1fQ.QCFQ7CLANeIxJxgbuBCFtP0kgH0rGRDR334UY94FJcA';
+
+      const apiUrl = 'https://aa62-182-253-124-139.ngrok-free.app/users';
+
+      fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.getElementById('response').textContent = `Error: ${error.message}`;
+      });
+    });
+  </script>
+</body>
+</html>
