@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { Nama, Email, Password, Tanggal_Lahir } = req.body;
+    const { Nama, Email, Password, Tanggal_Lahir, Role } = req.body;
     const Foto_Profil = req.file ? req.file.path : null;
 
     if (!Password) {
@@ -26,7 +26,8 @@ exports.createUser = async (req, res) => {
       Email,
       Password: hashedPassword,
       Tanggal_Lahir,
-      Foto_Profil
+      Foto_Profil,
+      Role: Role || "user"
     });
 
     res.status(201).json({ message: "User created successfully!", user: newUser });
@@ -47,7 +48,7 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { Nama, Email, Password, Tanggal_Lahir } = req.body;
+    const { Nama, Email, Password, Tanggal_Lahir, Role } = req.body;
     const user = await User.findByPk(req.params.id);
 
     if (!user) {
@@ -57,12 +58,17 @@ exports.updateUser = async (req, res) => {
     const Foto_Profil = req.file ? req.file.path : user.Foto_Profil;
     const hashedPassword = Password ? await bcrypt.hash(Password, 12) : user.Password;
 
+    if (Role && req.user.Role !== "admin") {
+      return res.status(403).json({ error: "Unauthorized to change role" });
+    }
+
     await user.update({
       Nama,
       Email,
       Password: hashedPassword,
       Tanggal_Lahir,
-      Foto_Profil
+      Foto_Profil,
+      Role: Role || user.Role
     });
 
     res.status(200).json({ message: "User updated successfully!", user });

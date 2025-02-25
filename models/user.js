@@ -34,15 +34,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
-    Foto_Profil: { // ✅ Kolom baru untuk menyimpan URL gambar
+    Foto_Profil: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    Role: {
+      type: DataTypes.ENUM("admin", "user"),
+      allowNull: false,
+      defaultValue: "user"
     }
   }, {
     sequelize,
     modelName: 'User',
     timestamps: false
-  });
+  });  
 
   return User;
 };

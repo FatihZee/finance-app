@@ -46,8 +46,17 @@ exports.login = async (req, res) => {
         const validPassword = await bcrypt.compare(Password, user.Password);
         if (!validPassword) return res.status(401).json({ error: "Email atau password salah" });
 
-        const token = jwt.sign({ id: user.User_ID, email: user.Email }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        const refreshToken = jwt.sign({ id: user.User_ID, email: user.Email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+        const token = jwt.sign(
+            { id: user.User_ID, email: user.Email, role: user.Role },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+        
+        const refreshToken = jwt.sign(
+            { id: user.User_ID, email: user.Email, role: user.Role },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );        
 
         res.status(200).json({ message: "Login berhasil", token, refreshToken });
     } catch (error) {

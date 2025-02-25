@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const upload = require("../middleware/upload");
+const { isAdmin } = require("../middleware/auth");
 
 /**
  * @swagger
@@ -139,10 +140,10 @@ const upload = require("../middleware/upload");
  *         description: Berhasil menghapus pengguna
  */
 
-router.get("/", authMiddleware, userController.getAllUsers);
+router.get("/", authMiddleware, isAdmin, userController.getAllUsers);
 router.post("/", authMiddleware, upload.single("Foto_Profil"), userController.createUser);
 router.get("/:User_ID", authMiddleware, userController.getUserById);
 router.put("/:User_ID", authMiddleware, upload.single("Foto_Profil"), userController.updateUser);
-router.delete("/:User_ID", authMiddleware, userController.deleteUser);
+router.delete("/:User_ID", authMiddleware, isAdmin, userController.deleteUser);
 
 module.exports = router;
