@@ -1,20 +1,42 @@
--- Tabel Pengguna
+-- Tabel Pengguna (Harus dibuat pertama karena menjadi referensi FK)
 CREATE TABLE Users (
     User_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Nama VARCHAR(100),
-    Email VARCHAR(100) UNIQUE,
-    Password VARCHAR(255),
-    Tanggal_Lahir DATE,
-    Tanggal_Daftar TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    Nama VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Tanggal_Lahir DATE NOT NULL,
+    Tanggal_Daftar TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Foto_Profil VARCHAR(255) NULL,
+    Role ENUM('admin', 'user') NOT NULL DEFAULT 'user'
 );
 
--- Tabel Kategori Transaksi
+-- Tabel Kategori Transaksi (Tidak memiliki FK, bisa dibuat setelah Users)
 CREATE TABLE Transaction_Categories (
     Category_ID INT PRIMARY KEY AUTO_INCREMENT,
     Nama_Kategori VARCHAR(50)
 );
 
--- Tabel Transaksi
+-- Tabel Rekening (Bergantung pada Users, jadi dibuat setelah Users)
+CREATE TABLE Accounts (
+    Account_ID INT PRIMARY KEY AUTO_INCREMENT,
+    User_ID INT,
+    Nama_Rekening VARCHAR(50),
+    Saldo DECIMAL(15,2),
+    FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
+);
+
+-- Tabel Tagihan (Bergantung pada Users, jadi dibuat setelah Users)
+CREATE TABLE Bills (
+    Bill_ID INT PRIMARY KEY AUTO_INCREMENT,
+    User_ID INT,
+    Nama_Tagihan VARCHAR(100),
+    Jumlah DECIMAL(15,2),
+    Tanggal_Batas DATE,
+    Status ENUM('Belum Bayar', 'Sudah Bayar') DEFAULT 'Belum Bayar',
+    FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
+);
+
+-- Tabel Transaksi (Bergantung pada Users & Transaction_Categories, jadi dibuat terakhir)
 CREATE TABLE Transactions (
     Transaction_ID INT PRIMARY KEY AUTO_INCREMENT,
     User_ID INT,
@@ -24,24 +46,4 @@ CREATE TABLE Transactions (
     Deskripsi TEXT,
     FOREIGN KEY (User_ID) REFERENCES Users(User_ID),
     FOREIGN KEY (Category_ID) REFERENCES Transaction_Categories(Category_ID)
-);
-
--- Tabel Rekening
-CREATE TABLE Accounts (
-    Account_ID INT PRIMARY KEY AUTO_INCREMENT,
-    User_ID INT,
-    Nama_Rekening VARCHAR(50),
-    Saldo DECIMAL(15,2),
-    FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
-);
-
--- Tabel Tagihan
-CREATE TABLE Bills (
-    Bill_ID INT PRIMARY KEY AUTO_INCREMENT,
-    User_ID INT,
-    Nama_Tagihan VARCHAR(100),
-    Jumlah DECIMAL(15,2),
-    Tanggal_Batas DATE,
-    Status ENUM('Belum Bayar', 'Sudah Bayar') DEFAULT 'Belum Bayar',
-    FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
 );

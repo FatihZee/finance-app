@@ -142,8 +142,8 @@ const { isAdmin } = require("../middleware/auth");
 
 router.get("/", authMiddleware, isAdmin, userController.getAllUsers);
 router.post("/", authMiddleware, upload.single("Foto_Profil"), userController.createUser);
-router.get("/:User_ID", authMiddleware, userController.getUserById);
-router.put("/:User_ID", authMiddleware, upload.single("Foto_Profil"), userController.updateUser);
-router.delete("/:User_ID", authMiddleware, isAdmin, userController.deleteUser);
+router.get("/:id", authMiddleware, userController.getUserById);
+router.put("/:id", authMiddleware, upload.single("Foto_Profil"), userController.updateUser);
+router.delete("/:id", authMiddleware, isAdmin, userController.deleteUser);
 
 module.exports = router;
