@@ -1,6 +1,3 @@
-const swaggerJSDoc = require("swagger-jsdoc");
-const swaggerUI = require("swagger-ui-express");
-
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -11,7 +8,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "https://finance-app-three-psi.vercel.app",
       },
     ],
   },
@@ -21,7 +18,7 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 const setupSwagger = (app) => {
-  app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+  app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec, { explorer: true }));
 };
 
 module.exports = setupSwagger;
