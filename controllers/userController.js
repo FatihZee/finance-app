@@ -1,9 +1,16 @@
-const { User } = require('../models');
+const { User, Account } = require('../models');
 const bcrypt = require('bcrypt');
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      include: [
+        {
+          model: Account,
+          attributes: ['Account_ID', 'Nama_Rekening', 'Saldo'],
+        },
+      ],
+    });
     res.status(200).json(users);
   } catch (error) {
     console.error("Error getting users:", error);
@@ -40,7 +47,15 @@ exports.createUser = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id, {
+      include: [
+        {
+          model: Account,
+          attributes: ['Account_ID', 'Nama_Rekening', 'Saldo'],
+        },
+      ],
+    });
+    
     if (!user) return res.status(404).json({ error: "User tidak ditemukan" });
 
     res.status(200).json(user);

@@ -4,9 +4,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-
+      User.hasMany(models.Account, { foreignKey: 'User_ID', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
   }
+  
   User.init({
     User_ID: {
       type: DataTypes.INTEGER,

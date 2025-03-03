@@ -5,6 +5,7 @@ const setupSwagger = require("./config/swagger");
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require("./routes/authRoutes");
 const transactionCategoryRoutes = require('./routes/transactionCategoryRoutes');
+const accountRoutes = require('./routes/accountRoutes');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/users', userRoutes);
 app.use("/auth", authRoutes);
 app.use('/categories', transactionCategoryRoutes);
+app.use('/accounts', accountRoutes);
 
 setupSwagger(app);
 
